@@ -64,6 +64,12 @@ namespace CabInvoiceGenerator
             }
             return Math.Max(totalFare, MINIMUM_COST);
         }
+        //Method to Genetare Enhanced Invoice.
+        public InvoiceSummary EnhancedInvoice(Ride[] rides)
+        {
+            double result = MultipleRide(rides);
+            return new InvoiceSummary(rides.Length, result);
+        }
     }
     //RideType Enum
     public enum RideType

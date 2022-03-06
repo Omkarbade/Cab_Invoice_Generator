@@ -107,6 +107,20 @@ namespace CabInvoiceTest
             {
                 Assert.AreEqual(expected, ex.Message);
             }
+           
+        }
+        // Test Methods For UC-3
+        // Enhanced Invoice Generation
+
+        [TestMethod]
+        [TestCategory("Enhanced Invoice")]
+        public void GivenNoOfRides_ShouldReturnEnhancedInvoice()
+        {
+            Ride[] rides = { new Ride(3.0, 5), new Ride(4.0, 10) };
+            double totalfare = 85.0;
+            InvoiceSummary excepted = new InvoiceSummary(rides.Length, totalfare);
+            InvoiceSummary actual = normal.EnhancedInvoice(rides);
+            Assert.AreEqual(excepted, actual);
         }
     }
 }
