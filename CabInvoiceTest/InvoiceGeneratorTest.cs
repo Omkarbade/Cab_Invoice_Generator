@@ -1,5 +1,9 @@
 using CabInvoiceGenerator;
+using Microsoft.Graph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using User = CabInvoiceGenerator.User;
 
 namespace CabInvoiceTest
 {
@@ -15,9 +19,9 @@ namespace CabInvoiceTest
             normal = new InvoiceGenerator(RideType.NORMAL);
             premium = new InvoiceGenerator(RideType.PREMIUM);
         }
- 
+        //Test Methods For UC-1 And Uc-5
          // RideType- NORMAL And PREMIUM.
-
+         
         [TestMethod]
         [TestCategory("NormalRideFare")]
         public void GivenDistanceAndTime_ShouldReturnTotalFareForNormalRide()
@@ -73,10 +77,10 @@ namespace CabInvoiceTest
             }
         }
         // Test Methods For UC-2
-         //Multiple Ride
+         // Multiple Ride
 
         [TestMethod]
-        [TestCategory("MltipleRideFareForNormalRideType")]
+        [TestCategory("MultipleRideFareForNormalRideType")]
         public void GivenMultipleRide_ShouldReturnTotalAggregateFareForNormalRide()
         {
             Ride[] rides = { new Ride(3.0, 5), new Ride(4.0, 10) };
@@ -85,7 +89,7 @@ namespace CabInvoiceTest
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        [TestCategory("MltipleRideFareForPremiumRideType")]
+        [TestCategory("MultipleRideFareForPremiumRideType")]
         public void GivenMultipleRide_ShouldReturnTotalAggregateFareForPremiumRide()
         {
             Ride[] rides = { new Ride(2.0, 5), new Ride(3.0, 10) };
@@ -107,20 +111,43 @@ namespace CabInvoiceTest
             {
                 Assert.AreEqual(expected, ex.Message);
             }
-           
         }
         // Test Methods For UC-3
-        // Enhanced Invoice Generation
-
+         //  Enhanced Invoice Generation
+         
         [TestMethod]
-        [TestCategory("Enhanced Invoice")]
-        public void GivenNoOfRides_ShouldReturnEnhancedInvoice()
+        [TestCategory("Enhanced Invoice For Normal Ride")]
+        public void GivenNoOfRides_ShouldReturnEnhancedInvoice_ForNormalRide()
         {
             Ride[] rides = { new Ride(3.0, 5), new Ride(4.0, 10) };
             double totalfare = 85.0;
             InvoiceSummary excepted = new InvoiceSummary(rides.Length, totalfare);
             InvoiceSummary actual = normal.EnhancedInvoice(rides);
             Assert.AreEqual(excepted, actual);
+        }
+        [TestMethod]
+        [TestCategory("Enhanced Invoice For Premium Ride")]
+        public void GivenNoOfRides_ShouldReturnEnhancedInvoice_ForPremiumRide()
+        {
+            Ride[] rides = { new Ride(2.0, 5), new Ride(3.0, 10) };
+            double totalfare = 105.0;
+            InvoiceSummary excepted = new InvoiceSummary(rides.Length, totalfare);
+            InvoiceSummary actual = premium.EnhancedInvoice(rides);
+            Assert.AreEqual(excepted, actual);
+        }
+         //Test Methods For UC-4
+          //Enhanced Invoice Generation as per UserId
+       
+        [TestMethod]
+        [TestCategory("Enhanced Invoice For Normal Ride")]
+        public void GivenUserId_ShouldReturnInvoiceForUser()
+        {
+            Ride[] rides = { new Ride(3.0, 5), new Ride(4.0, 10) };
+            double totalfare = 85.0;
+            InvoiceSummary invoiceSummary = new InvoiceSummary(rides.Length, totalfare);
+            User expected = new User("Omkar", invoiceSummary);
+            User actual = normal.InvoiceService(rides, "Omkar");
+            Assert.AreEqual(expected, actual);
         }
     }
 }
